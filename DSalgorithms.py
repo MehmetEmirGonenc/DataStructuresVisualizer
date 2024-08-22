@@ -46,3 +46,43 @@ class LinkedList:
             print(x.value)
             x = x.next_node
         
+    def get_list (self): # Returns as ordered python list (Start to end)
+        ordered_list = []
+        x = self.start_node
+        while(x != None):
+            ordered_list.append(x.value)
+            x = x.next_node
+        return ordered_list
+    
+class Stack:
+    def __init__ (self):
+        self.stack = LinkedList() # We start an empty with linked list
+    
+    def push (self, value): # Add element on the top of the stack
+        self.stack.insert_begin(value)
+    
+    def pop (self): # Remove a element from the top of the stack
+        self.stack.remove_node(self.stack.start_node.value)
+        
+    def print_stack (self): # Print the list DeBUG
+        self.stack.print_list()
+        
+    def get_list (self): # Returns as ordered python list (Top to botton)
+        return self.stack.get_list()
+        
+class Queue:
+    def __init__ (self):
+        self.queue = LinkedList() # We start with an empty linked list
+        
+    def enqueue (self, value): # Simple Queues gets input just from the end of the list
+        self.queue.insert_end(value)
+    
+    def dequeue (self): # Simple Queues removes elements just from the beginning of the list
+        self.queue.remove_node(self.queue.start_node.value)
+    
+    def print_list (self): # DeBUG
+        self.queue.print_list()
+        
+    def get_list (self): # Returns as ordered python list (Start to end)
+        return self.queue.get_list()
+    
