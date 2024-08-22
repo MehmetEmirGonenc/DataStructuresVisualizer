@@ -46,3 +46,27 @@ class LinkedList:
             print(x.value)
             x = x.next_node
         
+    def get_list (self): # Returns as ordered python list (Start to end)
+        ordered_list = []
+        x = self.start_node
+        while(x != None):
+            ordered_list.append(x.value)
+            x = x.next_node
+        return ordered_list
+    
+class Stack:
+    def __init__ (self):
+        self.stack = LinkedList() # We start with linked list
+    
+    def push (self, value): # Add element on the top of the stack
+        self.stack.insert_begin(value)
+    
+    def pop (self): # Remove a element from the top of the stack
+        self.stack.remove_node(self.stack.start_node.value)
+        
+    def print_stack (self): # Print the list DeBUG
+        self.stack.print_list()
+        
+    def get_list (self): # Returns as ordered python list (Top to botton)
+        return self.stack.get_list()
+        
