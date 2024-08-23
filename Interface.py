@@ -1,111 +1,130 @@
 import tkinter as tk
 from tkinter import ttk
+from DSalgorithms import LinkedList 
+from DSalgorithms import Stack
+from DSalgorithms import Queue
 
 # Create the main window
 root = tk.Tk()
 root.title("DS Diagrams")
 root.geometry("700x600")
 
+def show_linkedlist():
+    #clean middle_framee and left_frame
+    middle_framee.delete("all")
+    for widget in left_frame.winfo_children():
+     widget.destroy()
+    
+    #add element to begin
+    entry_addBeginL = tk.Entry(left_frame)
+    entry_addBeginL.pack()
+    btn_addBeginL = tk.Button(left_frame, text="Add begin", command=LinkedList.insert_begin)
+    btn_addBeginL.pack(pady=(0,20))
+    
+    #add elemen to end
+    entry_addEndL = tk.Entry(left_frame)
+    entry_addEndL.pack()
+    btn_addEndL = tk.Button(left_frame, text="Add End", command=LinkedList.insert_end)
+    btn_addEndL.pack(pady=(0,20))
+    
+    #remove element
+    entry_removeL = tk.Entry(left_frame)
+    entry_removeL.pack()
+    btn_removeL = tk.Button(left_frame, text="Remove", command=LinkedList.remove_node)
+    btn_removeL.pack()
+
 def show_stack():
-    # Canvas üzerinde stack modelini göster
-    canvas.delete("all")
-    canvas.create_text(200, 200, text="Stack Model", font=('Helvetica', 16))
+    #clean middle_framee and left_frame
+    middle_framee.delete("all")
+    for widget in left_frame.winfo_children():
+     widget.destroy()
+    
+    #add element to end
+    entry_addS = tk.Entry(left_frame)
+    entry_addS.pack()
+    btn_addS = tk.Button(left_frame, text="Push", command=Stack.push)
+    btn_addS.pack(pady=(0,20))
+    
+    #remove last element 
+    entry_removeS = tk.Entry(left_frame)
+    entry_removeS.pack()
+    btn_removeS = tk.Button(left_frame, text="Pop", command=Stack.pop)
+    btn_removeS.pack()
+    
 
 def show_queue():
-    # Canvas üzerinde queue modelini göster
-    canvas.delete("all")
-    canvas.create_text(200, 200, text="Queue Model", font=('Helvetica', 16))
-
-def show_linkedlist():
-    # Canvas üzerinde tree modelini göster
-    canvas.delete("all")
-    canvas.create_text(200, 200, text="Linked List Model", font=('Helvetica', 16))
-
-def add_model():
-    model = entry_add.get()
-    # Model ekleme işlemi burada yapılabilir
+    #clean middle_framee and left_frame
+    middle_framee.delete("all")
+    for widget in left_frame.winfo_children():
+     widget.destroy()
     
-def remove_model():
-    model = entry_remove.get()
-    # Model silme işlemi burada yapılabilir
-  
+    #add element to end
+    entry_addQ = tk.Entry(left_frame)
+    entry_addQ.pack()
+    btn_addQ = tk.Button(left_frame, text="Enqueue", command=Queue.enqueue)
+    btn_addQ.pack(pady=(0,20))
+    
+    #remove the first element
+    entry_removeQ = tk.Entry(left_frame)
+    entry_removeQ.pack()
+    btn_removeQ = tk.Button(left_frame, text="Dequeue", command=Queue.dequeue)
+    btn_removeQ.pack()
+    
 # Create a frame for the fixed upper section
 top_frame = tk.Frame(root, height=80, bg="lightgray",relief="solid",borderwidth="2")
 top_frame.pack(fill="x", side="top")
 
-# Example content for the fixed frame (e.g., a label)
-# top_Frame = tk.Label(top_Frame, text="Permanent Upper Section", bg="lightgray")
-# top_Frame.pack(pady=20)
+# Create a frame for the left section
+left_Frame = tk.Canvas(root, width=600, bg="lightgray",relief="solid",borderwidth="2")
+left_Frame.pack(fill="y", side="left")
 
+# Example content for the fixed frame (e.g., a label)
+left_frame = tk.Label(left_Frame, bg="lightgray")
+left_frame.pack(pady=200)
+
+middle_framee = tk.Canvas(root)
+middle_framee.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+#adding buttons to top_frame
+btn_tree = tk.Button(top_frame, text="Linked List", command=show_linkedlist)
+btn_tree.pack(side=tk.LEFT,padx=(0,20))
 btn_stack = tk.Button(top_frame, text="Stack", command=show_stack)
 btn_stack.pack(side=tk.LEFT,padx=(0,20))
-
 btn_queue = tk.Button(top_frame, text="Queue", command=show_queue)
 btn_queue.pack(side=tk.LEFT,padx=(0,20))
 
-btn_tree = tk.Button(top_frame, text="Linked List", command=show_linkedlist)
-btn_tree.pack(side=tk.LEFT,padx=(0,20))
-
-# Create a frame for the left section
-leftFrame = tk.Frame(root, width=600, bg="lightgray",relief="solid",borderwidth="2")
-leftFrame.pack(fill="y", side="left")
-
-# Example content for the fixed frame (e.g., a label)
-left_frame = tk.Label(leftFrame, bg="lightgray")
-left_frame.pack(pady=200)
-
-# Sol kısım (Ekleme ve silme işlemlerinin bulunduğu sabit bölüm)
-
-entry_add = tk.Entry(left_frame)
-entry_add.pack()
-
-btn_add = tk.Button(left_frame, text="Add", command=add_model)
-btn_add.pack(pady=(0,20))
-
-entry_remove = tk.Entry(left_frame)
-entry_remove.pack()
-
-btn_remove = tk.Button(left_frame, text="Remove", command=remove_model)
-btn_remove.pack()
-
-middle_frame = tk.Frame(root)
-middle_frame.pack( fill=tk.BOTH, expand=True)
-
-canvas = tk.Canvas(root)
-canvas.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
-
-# Alt kısım için çerçeve oluştur
-verticalScroll = tk.Frame(middle_frame)
+# Create frame for bottom
+verticalScroll = tk.Frame(middle_framee)
 verticalScroll.pack(fill="both", expand=True, side="bottom")
 
-# Kaydırma özelliği için bir canvas ekle
+#Add a canvas for the scroll feature
 verticalCanvas = tk.Canvas(verticalScroll)
 verticalCanvas.pack(side="left", fill="both", expand=True)
 
-# Dikey kaydırma çubuğunu ekle
+# Add vertical scroll bar
 v_scrollbar = ttk.Scrollbar(verticalScroll, orient="vertical", command=verticalCanvas.yview)
 v_scrollbar.pack(side="left", fill="y")
 
-# Yatay kaydırma çubuğunu ekle
-h_scrollbar = ttk.Scrollbar(middle_frame, orient="horizontal", command=verticalCanvas.xview)
+# Add horizontal scroll bar
+h_scrollbar = ttk.Scrollbar(middle_framee, orient="horizontal", command=verticalCanvas.xview)
 h_scrollbar.pack(side="top", fill="x")
 
-# Canvas'ı kaydırma çubuklarıyla yapılandır
+# Configure Canvas with scrollbars
 verticalCanvas.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
 verticalCanvas.bind('<Configure>', lambda e: verticalCanvas.configure(scrollregion=verticalCanvas.bbox("all")))
 
-# Canvas içinde kaydırılabilir içerik çerçevesi oluştur
+# Create scrollable content frame in Canvas
 vScroll_content = tk.Frame(verticalCanvas)
 
-# Kaydırılabilir içerik çerçevesini canvas'a ekle
+# Add scrollable content frame to canvas
 verticalCanvas.create_window((0, 0), window=vScroll_content, anchor="sw")
 
 # # Test amacıyla birkaç örnek widget ekleyelim
-for i in range(20):
-    middle_frame=tk.Label(vScroll_content, text=f"Label {i+1}").grid(row=i, column=0, padx=10, pady=10)
+# for i in range(20):
+#     middle_frame=tk.Label(vScroll_content, text=f"Label {i+1}").grid(row=i, column=0, padx=10, pady=10)
 
-for j in range(10):
-   middle_frame=tk.Label(vScroll_content, text=f"Horizontal {j+1}").grid(row=0, column=j, padx=10, pady=10)
+# for j in range(10):
+#    middle_frame=tk.Label(vScroll_content, text=f"Horizontal {j+1}").grid(row=0, column=j, padx=10, pady=10)
 
 
 # Run the application
