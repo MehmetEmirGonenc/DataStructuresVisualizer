@@ -13,7 +13,10 @@ def show_linkedlist():
     #clean middle_framee and left_frame
     middle_framee.delete("all")
     for widget in left_frame.winfo_children():
-     widget.destroy()
+        widget.destroy()
+    for widget in middle_framee.winfo_children():
+        widget.destroy()
+        break
     
     # Linked list object created
     ll_object = LinkedList()
@@ -27,8 +30,27 @@ def show_linkedlist():
         
     vcmd = (root.register(validate_input), '%P')
     
-    def visualize_list (ordered_list):
-        print(ordered_list)
+    def visualize_list (ordered_list): ## Organize!!
+        top_gap = 25
+        left_gap = 25
+        box_width = 50
+        box_height = 50
+        box_gap = 50
+        
+        middle_framee.delete("all")
+        gap_num = 0
+        for i in range(len(ordered_list)):
+            middle_framee.create_rectangle(left_gap + box_width * i + box_gap * gap_num, top_gap, left_gap + box_width * (i+1) + box_gap * gap_num, top_gap + box_height, outline="black", fill="lightblue")
+            middle_framee.create_text(left_gap + box_width * i + box_gap * gap_num + (box_width/2), top_gap + (box_height/2), text=ordered_list[i], font=("Arial", 12))
+            
+            if i < len(ordered_list)-1:
+                arrow_x0 = left_gap + box_width * (i+1) + box_gap * gap_num
+                arrow_x1 = left_gap + box_width * (i+1) + box_gap * (gap_num+1)
+                arrow_y0 = top_gap + box_height/2
+                arrow_y1 = top_gap + box_height/2
+            
+                middle_framee.create_line(arrow_x0, arrow_y0, arrow_x1, arrow_y1 , arrow=tk.LAST,width=3, arrowshape=(10, 10, 5), fill="black")
+                gap_num +=1
     
     # Linked list process function
     def linked_list_process(list, func, button):
@@ -41,6 +63,7 @@ def show_linkedlist():
         if user_input != "":
             func(list, int(user_input))
             visualize_list(list.get_list())
+        button.delete(0, tk.END)
     
     #add element to begin
     entry_addBeginL = tk.Entry(left_frame, validate="key", validatecommand=vcmd)
@@ -119,7 +142,7 @@ left_Frame.pack(fill="y", side="left")
 left_frame = tk.Label(left_Frame, bg="lightgray")
 left_frame.pack(pady=200)
 
-middle_framee = tk.Canvas(root)
+middle_framee = tk.Canvas(root, width=600, height=600)
 middle_framee.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
 #adding buttons to top_frame
