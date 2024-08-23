@@ -32,6 +32,17 @@ def show_linkedlist():
     entry_removeL.pack()
     btn_removeL = tk.Button(left_frame, text="Remove", command=LinkedList.remove_node)
     btn_removeL.pack()
+    
+    # middle_framee.delete("all")
+    # elements = LinkedList.get_list()
+    # x, y = 10, 10
+    # box_width, box_height = 50, 30
+    # for i, element in enumerate(elements):
+    #     middle_framee.create_rectangle(x, y, x + box_width, y + box_height, outline="black")
+    #     middle_framee.create_text(x + box_width // 2, y + box_height // 2, text=str(element))
+    #     if i < len(elements) - 1:
+    #         middle_framee.create_line(x + box_width, y + box_height // 2, x + box_width + 20, y + box_height // 2, arrow=tk.LAST)
+    #     x += box_width + 30
 
 def show_stack():
     #clean middle_framee and left_frame
@@ -49,8 +60,7 @@ def show_stack():
     entry_removeS = tk.Entry(left_frame)
     entry_removeS.pack()
     btn_removeS = tk.Button(left_frame, text="Pop", command=Stack.pop)
-    btn_removeS.pack()
-    
+    btn_removeS.pack()   
 
 def show_queue():
     #clean middle_framee and left_frame
