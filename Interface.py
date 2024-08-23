@@ -15,22 +15,49 @@ def show_linkedlist():
     for widget in left_frame.winfo_children():
      widget.destroy()
     
+    # Linked list object created
+    ll_object = LinkedList()
+    
+    # Validation function to avoid from character that aren't numeric
+    def validate_input(input):
+        if input == "" or input.isdigit() or input[0] == '-':
+            return True
+        else:
+            return False
+        
+    vcmd = (root.register(validate_input), '%P')
+    
+    def visualize_list (ordered_list):
+        print(ordered_list)
+    
+    # Linked list process function
+    def linked_list_process(list, func, button):
+        """
+        list -> LinkedList object
+        func -> LinkedList function (insert_begin, insert_end, remove_node)
+        button -> tkinter object (button)
+        """
+        user_input = button.get()
+        if user_input != "":
+            func(list, int(user_input))
+            visualize_list(list.get_list())
+    
     #add element to begin
-    entry_addBeginL = tk.Entry(left_frame)
+    entry_addBeginL = tk.Entry(left_frame, validate="key", validatecommand=vcmd)
     entry_addBeginL.pack()
-    btn_addBeginL = tk.Button(left_frame, text="Add begin", command=LinkedList.insert_begin)
+    btn_addBeginL = tk.Button(left_frame, text="Add begin", command=lambda: linked_list_process(ll_object, LinkedList.insert_begin, entry_addBeginL))
     btn_addBeginL.pack(pady=(0,20))
     
     #add elemen to end
-    entry_addEndL = tk.Entry(left_frame)
+    entry_addEndL = tk.Entry(left_frame, validate="key", validatecommand=vcmd)
     entry_addEndL.pack()
-    btn_addEndL = tk.Button(left_frame, text="Add End", command=LinkedList.insert_end)
+    btn_addEndL = tk.Button(left_frame, text="Add End", command=lambda: linked_list_process(ll_object, LinkedList.insert_end, entry_addEndL))
     btn_addEndL.pack(pady=(0,20))
     
     #remove element
-    entry_removeL = tk.Entry(left_frame)
+    entry_removeL = tk.Entry(left_frame, validate="key", validatecommand=vcmd)
     entry_removeL.pack()
-    btn_removeL = tk.Button(left_frame, text="Remove", command=LinkedList.remove_node)
+    btn_removeL = tk.Button(left_frame, text="Remove", command=lambda: linked_list_process(ll_object, LinkedList.remove_node, entry_removeL))
     btn_removeL.pack()
     
     # middle_framee.delete("all")
