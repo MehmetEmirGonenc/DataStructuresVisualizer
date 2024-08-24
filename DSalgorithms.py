@@ -6,20 +6,20 @@ class LinkedListNode:
 
 class LinkedList:
     def __init__(self):
-        self.start_node = LinkedListNode(None, None) # We start with empty node
+        self.start_node = None # We start as null initially
     
     def insert_begin (self, value):
-        # If list of element is null so empty list, we edit start_node
-        if self.start_node.value == None and self.start_node.next_node == None:
-            self.start_node.value = value
+        # If we have an empty list we create one
+        if self.start_node == None:
+            self.start_node = LinkedListNode(value, None)
         else:
             new_node = LinkedListNode(value, self.start_node)
             self.start_node = new_node
     
     def insert_end (self, value):
-        # If list of element is null so empty list, we edit start_node
-        if self.start_node.value == None and self.start_node.next_node == None:
-            self.start_node.value = value
+        # If we have an empty list we create one
+        if self.start_node == None:
+            self.start_node = LinkedListNode(value)
         else:
             new_node = LinkedListNode(value, None)
             x = self.start_node
