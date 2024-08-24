@@ -86,3 +86,56 @@ class Queue:
     def get_list (self): # Returns as ordered python list (Start to end)
         return self.queue.get_list()
     
+class BinaryTreeNode:
+    def __init__(self, value, left_node = None, right_node = None):
+        self.value = value
+        self.left_node = left_node
+        self.right_node = right_node
+        
+class BST: # Binary Search Tree
+    def __init__ (self):
+        self.root = BinaryTreeNode(None, None, None)
+    
+    def insert_node (self, value):
+        # We create a new tree if there is not
+        if self.root.value == None: # So if root is empty means empty tree
+            self.root.value = value
+        # We add nodes to tree is tree isn't empty
+        else:
+            self.root = self.insert_node_recursive(self.root, value)
+            
+    def insert_node_recursive(self, x, value):
+        if x == None: # If we reached to the leaf of the node, create a new node
+            return BinaryTreeNode(value)
+        
+        if value < x.value:
+            x.left_node = self.insert_node_recursive(x.left_node, value)
+        else:
+            x.right_node = self.insert_node_recursive(x.right_node, value)
+            
+        return x
+    
+    def level_order_as_nested_list(self):
+        if self.root is None:
+            return []
+        
+        queue = [self.root]  # Initialize the queue with the root node
+        levels = []  # This will store levels as nested list
+        
+        while queue:
+            level_size = len(queue)  # Number of nodes at the current level
+            current_level = []  # List to hold values of the current level
+            
+            for _ in range(level_size):
+                node = queue.pop(0)  # Dequeue the first node
+                current_level.append(node.value)
+                
+                # Enqueue left and right children
+                if node.left_node:
+                    queue.append(node.left_node)
+                if node.right_node:
+                    queue.append(node.right_node)
+            
+            levels.append(current_level)  # Add the current level to the levels list
+        
+        return levels
