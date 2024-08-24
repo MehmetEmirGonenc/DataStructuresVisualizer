@@ -9,7 +9,14 @@ root = tk.Tk()
 root.title("DS Diagrams")
 root.geometry("700x600")
 
-def show_linkedlist():
+# Validation function to avoid from character that aren't numeric
+def validate_input(input):
+    if input == "" or input.isdigit() or input[0] == '-':
+        return True
+    else:
+        return False
+
+def clear_widget():
     #clean middle_framee and left_frame
     middle_framee.delete("all")
     for widget in left_frame.winfo_children():
@@ -17,17 +24,11 @@ def show_linkedlist():
     for widget in middle_framee.winfo_children():
         widget.destroy()
         break
-    
+
+def show_linkedlist():
+    clear_widget()
     # Linked list object created
-    ll_object = LinkedList()
-    
-    # Validation function to avoid from character that aren't numeric
-    def validate_input(input):
-        if input == "" or input.isdigit() or input[0] == '-':
-            return True
-        else:
-            return False
-        
+    ll_object = LinkedList()      
     vcmd = (root.register(validate_input), '%P')
     
     def visualize_list (ordered_list): ## Organize!!
@@ -88,22 +89,9 @@ def show_linkedlist():
     btn_removeL.pack()
 
 def show_stack():
-    #clean middle_framee and left_frame
-    middle_framee.delete("all")
-    for widget in left_frame.winfo_children():
-        widget.destroy()
-    for widget in middle_framee.winfo_children():
-        widget.destroy()
-        break
+    clear_widget()
     #stack object created
     stack_object= Stack()
-    
-    # Validation function to avoid from character that aren't numeric
-    def validate_input(input):
-        if input == "" or input.isdigit() or input[0] == '-':
-            return True
-        else:
-            return False
     vcmd = (root.register(validate_input), '%P')
     
     def visualize_list (ordered_list): ## Organize!!
@@ -161,21 +149,64 @@ def show_stack():
     btn_removeS.pack()   
 
 def show_queue():
-    #clean middle_framee and left_frame
-    middle_framee.delete("all")
-    for widget in left_frame.winfo_children():
-     widget.destroy()
+    clear_widget()
+    vcmd = (root.register(validate_input), '%P')
+    #create queue object
+    queue_object=Queue()
+    
+    def visualize_list (ordered_list): ## Organize!!
+        top_gap = 25
+        left_gap = 25
+        box_width = 50
+        box_height = 50
+        box_gap = 50
+        
+        middle_framee.delete("all")
+        gap_num = 0
+        for i in range(len(ordered_list)):
+            box_x0=left_gap + box_width * i + box_gap * gap_num
+            box_x1=left_gap + box_width * (i+1) + box_gap * gap_num
+            box_y0= top_gap
+            box_y1= top_gap + box_height
+            middle_framee.create_rectangle(box_x0,box_y0,box_x1,box_y1 ,outline="black", fill="lightblue")
+            middle_framee.create_text(left_gap + box_width * i + box_gap * gap_num + (box_width/2), top_gap + (box_height/2), text=ordered_list[i], font=("Arial", 12))
+            
+            if i < len(ordered_list)-1:
+                arrow_x0 = left_gap + box_width * (i+1) + box_gap * gap_num
+                arrow_x1 = left_gap + box_width * (i+1) + box_gap * (gap_num+1)
+                arrow_y0 = top_gap + box_height/2
+                arrow_y1 = top_gap + box_height/2
+            
+                middle_framee.create_line(arrow_x0, arrow_y0, arrow_x1, arrow_y1 , arrow=tk.LAST,width=3, arrowshape=(10, 10, 5), fill="black")
+                gap_num +=1
+    
+    #
+    def enqueue_process(list,func,button):
+        """
+        list -> queue object
+        func -> queue function (enqueue,dequeue)
+        button -> tkinter object(button)  
+        """
+        user_input=button.get()
+        if user_input!="":
+            func(list,int(user_input))
+            visualize_list(list.get_list())
+        button.delete(0,tk.END)
+        
+    def dequeue_process(list):
+        list.dequeue()
+        if list:  # Ensure the list is not empty 
+          visualize_list(list.get_list())
+            
     
     #add element to end
-    entry_addQ = tk.Entry(left_frame)
+    entry_addQ = tk.Entry(left_frame,validate="key",validatecommand=vcmd)
     entry_addQ.pack()
-    btn_addQ = tk.Button(left_frame, text="Enqueue", command=Queue.enqueue)
+    btn_addQ = tk.Button(left_frame, text="Enqueue", command=lambda:enqueue_process(queue_object,Queue.enqueue,entry_addQ))
     btn_addQ.pack(pady=(0,20))
     
     #remove the first element
-    entry_removeQ = tk.Entry(left_frame)
-    entry_removeQ.pack()
-    btn_removeQ = tk.Button(left_frame, text="Dequeue", command=Queue.dequeue)
+    btn_removeQ = tk.Button(left_frame, text="Dequeue", command=lambda:dequeue_process(queue_object))
     btn_removeQ.pack()
     
 # Create a frame for the fixed upper section
