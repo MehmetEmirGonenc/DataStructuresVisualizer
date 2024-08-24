@@ -40,7 +40,11 @@ def show_linkedlist():
         middle_framee.delete("all")
         gap_num = 0
         for i in range(len(ordered_list)):
-            middle_framee.create_rectangle(left_gap + box_width * i + box_gap * gap_num, top_gap, left_gap + box_width * (i+1) + box_gap * gap_num, top_gap + box_height, outline="black", fill="lightblue")
+            box_x0=left_gap + box_width * i + box_gap * gap_num
+            box_x1=left_gap + box_width * (i+1) + box_gap * gap_num
+            box_y0= top_gap
+            box_y1= top_gap + box_height
+            middle_framee.create_rectangle(box_x0,box_y0,box_x1,box_y1 ,outline="black", fill="lightblue")
             middle_framee.create_text(left_gap + box_width * i + box_gap * gap_num + (box_width/2), top_gap + (box_height/2), text=ordered_list[i], font=("Arial", 12))
             
             if i < len(ordered_list)-1:
@@ -82,34 +86,78 @@ def show_linkedlist():
     entry_removeL.pack()
     btn_removeL = tk.Button(left_frame, text="Remove", command=lambda: linked_list_process(ll_object, LinkedList.remove_node, entry_removeL))
     btn_removeL.pack()
-    
-    # middle_framee.delete("all")
-    # elements = LinkedList.get_list()
-    # x, y = 10, 10
-    # box_width, box_height = 50, 30
-    # for i, element in enumerate(elements):
-    #     middle_framee.create_rectangle(x, y, x + box_width, y + box_height, outline="black")
-    #     middle_framee.create_text(x + box_width // 2, y + box_height // 2, text=str(element))
-    #     if i < len(elements) - 1:
-    #         middle_framee.create_line(x + box_width, y + box_height // 2, x + box_width + 20, y + box_height // 2, arrow=tk.LAST)
-    #     x += box_width + 30
 
 def show_stack():
     #clean middle_framee and left_frame
     middle_framee.delete("all")
     for widget in left_frame.winfo_children():
-     widget.destroy()
+        widget.destroy()
+    for widget in middle_framee.winfo_children():
+        widget.destroy()
+        break
+    #stack object created
+    stack_object= Stack()
     
+    # Validation function to avoid from character that aren't numeric
+    def validate_input(input):
+        if input == "" or input.isdigit() or input[0] == '-':
+            return True
+        else:
+            return False
+    vcmd = (root.register(validate_input), '%P')
+    
+    def visualize_list (ordered_list): ## Organize!!
+        top_gap = 25
+        left_gap = 25
+        box_width = 50
+        box_height = 50
+        box_gap = 50
+        
+        middle_framee.delete("all")
+        gap_num = 0
+        for i in range(len(ordered_list)):
+            box_x0=left_gap + box_width * i + box_gap * gap_num
+            box_x1=left_gap + box_width * (i+1) + box_gap * gap_num
+            box_y0= top_gap
+            box_y1= top_gap + box_height
+            middle_framee.create_rectangle(box_x0,box_y0,box_x1,box_y1 ,outline="black", fill="lightblue")
+            middle_framee.create_text(left_gap + box_width * i + box_gap * gap_num + (box_width/2), top_gap + (box_height/2), text=ordered_list[i], font=("Arial", 12))
+            
+            if i < len(ordered_list)-1:
+                arrow_x0 = left_gap + box_width * (i+1) + box_gap * gap_num
+                arrow_x1 = left_gap + box_width * (i+1) + box_gap * (gap_num+1)
+                arrow_y0 = top_gap + box_height/2
+                arrow_y1 = top_gap + box_height/2
+            
+                middle_framee.create_line(arrow_x0, arrow_y0, arrow_x1, arrow_y1 , arrow=tk.LAST,width=3, arrowshape=(10, 10, 5), fill="black")
+                gap_num +=1
+    
+    def stack_process(list,func,button):
+        """
+        list -> stack object
+        func -> stack function (push, pop)
+        button -> tkinter object(button)  
+        """
+        user_input=button.get()
+        if user_input!="":
+            func(list,int(user_input))
+            visualize_list(list.get_list())
+        button.delete(0,tk.END)
+    
+    def stack_process_pop(list):
+        list.pop()
+        if list:  # Ensure the list is not empty 
+          visualize_list(list.get_list())
+        
+      
     #add element to end
-    entry_addS = tk.Entry(left_frame)
+    entry_addS = tk.Entry(left_frame, validate="key",validatecommand=vcmd)
     entry_addS.pack()
-    btn_addS = tk.Button(left_frame, text="Push", command=Stack.push)
+    btn_addS = tk.Button(left_frame, text="Push", command=lambda:stack_process(stack_object,Stack.push,entry_addS))
     btn_addS.pack(pady=(0,20))
     
     #remove last element 
-    entry_removeS = tk.Entry(left_frame)
-    entry_removeS.pack()
-    btn_removeS = tk.Button(left_frame, text="Pop", command=Stack.pop)
+    btn_removeS = tk.Button(left_frame, text="Pop", command=lambda:stack_process_pop(stack_object))
     btn_removeS.pack()   
 
 def show_queue():
