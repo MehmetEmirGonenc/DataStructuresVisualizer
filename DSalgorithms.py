@@ -94,48 +94,80 @@ class BinaryTreeNode:
         
 class BST: # Binary Search Tree
     def __init__ (self):
-        self.root = BinaryTreeNode(None, None, None)
+        self.root = None
     
     def insert_node (self, value):
         # We create a new tree if there is not
-        if self.root.value == None: # So if root is empty means empty tree
-            self.root.value = value
+        if self.root == None: # So if root is empty means empty tree
+            self.root = BinaryTreeNode(value, None, None)
         # We add nodes to tree is tree isn't empty
         else:
-            self.root = self.insert_node_recursive(self.root, value)
+            self.root = self._insert_node_recursive(self.root, value)
             
-    def insert_node_recursive(self, x, value):
+    def _insert_node_recursive(self, x, value):
         if x == None: # If we reached to the leaf of the node, create a new node
             return BinaryTreeNode(value)
         
         if value < x.value:
-            x.left_node = self.insert_node_recursive(x.left_node, value)
+            x.left_node = self._insert_node_recursive(x.left_node, value)
         else:
-            x.right_node = self.insert_node_recursive(x.right_node, value)
+            x.right_node = self._insert_node_recursive(x.right_node, value)
             
         return x
     
-    def level_order_as_nested_list(self):
+    def remove_node(self, value):
+        self.root = self.remove_node_recursive(self.root, value)
+    
+    def min_value_node(self, node):
+        current = node
+        while current.left_node != None:
+            current = current.left_node
+        return current
+    
+    def remove_node_recursive(self, node, value):
+        if node is None:
+            return node  # If the node is not found, return None
+        
+        if value < node.value:
+            node.left_node = self.remove_node_recursive(node.left_node, value)
+        elif value > node.value:
+            node.right_node = self.remove_node_recursive(node.right_node, value)
+        else:
+            # Node with only one child or no child
+            if node.left_node is None:
+                return node.right_node
+            elif node.right_node is None:
+                return node.left_node
+            
+            # Node with two children: Get the in-order successor (smallest in the right subtree)
+            node.value = self.min_value_node(node.right_node).value
+            
+            # Delete the in-order successor
+            node.right_node = self.remove_node_recursive(node.right_node, node.value)
+        
+        return node
+    
+    def get_level_order_list(self):
         if self.root is None:
             return []
         
-        queue = [self.root]  # Initialize the queue with the root node
-        levels = []  # This will store levels as nested list
+        queue = [(self.root, None, None)]  # Queue stores tuples of (node, parent_value, position)
+        result = []
         
         while queue:
-            level_size = len(queue)  # Number of nodes at the current level
-            current_level = []  # List to hold values of the current level
+            level_size = len(queue)
+            current_level = []
             
             for _ in range(level_size):
-                node = queue.pop(0)  # Dequeue the first node
-                current_level.append(node.value)
+                node, parent_value, position = queue.pop(0)
+                current_level.append([node.value, [parent_value, position]])
                 
-                # Enqueue left and right children
                 if node.left_node:
-                    queue.append(node.left_node)
+                    queue.append((node.left_node, node.value, 'left'))
                 if node.right_node:
-                    queue.append(node.right_node)
+                    queue.append((node.right_node, node.value, 'right'))
             
-            levels.append(current_level)  # Add the current level to the levels list
+            result.append(current_level)
         
-        return levels
+        return result
+
